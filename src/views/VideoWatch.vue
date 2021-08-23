@@ -9,6 +9,8 @@
     </v-col>
     <v-col md="3" cols="12">
     <div class="display-1">{{ video.name }}</div>
+    <div class="green--text" v-if="isPlayed">Played</div>
+    <div v-else> <v-btn x-small>Mark As Played</v-btn> </div>
     <div v-html="video.description"></div>
     </v-col>
     </v-row>
@@ -35,6 +37,7 @@ export default {
         (vid) => vid._id == this.$route.params._id
       ) || {};
     },
+    ...mapState(["playedVideos, videos"]),
     playerOptions() {
       return {
         language: "en",
@@ -49,6 +52,9 @@ export default {
         fluid: true,
       };
     },
+    isPlayed() {
+      return false;
+    }
   },
 };
 </script>
