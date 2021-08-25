@@ -7,17 +7,30 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     videos: [],
-    playedVideos: [2, 3, 4],
+    playedVideos: [],
   },
   mutations: {
     SET_VIDEOS(state, videos){
       state.videos = videos;
-    }
+    },
+    SET_PLAYED_VIDEOS(state, playedVideos){
+      state.playedVideos = playedVideos;
+    },
+    MARK_VIDEO_PLAYED(state, videoId){
+      let playedVideos = state.playedVideos.concat(videoId);
+      state.playedVideos = playedVideos;
+      window.localStorage.playedVideos = JSON.stringify(playedVideos);
+    },
   },
   actions: {
     async loadVideos({commit}){
       let result = await api().get("/videos")
       commit("SET_VIDEOS", result.data.videos);
+      let playedVideos = JSON.parse(window.localStorage.playedVideos);
+      commit("SET_PLAYED_VIDEOS", playedVideos);
+    },
+    markPlayed({commit}, videoId){
+      commit("MARK_VIDEO_PLAYED", videoId);
     }
   },
   modules: {},

@@ -5,12 +5,13 @@
         <video-player
           ref="videoPlayer"
           :options="playerOptions"
+          @ended="markPlayed"
         ></video-player>
     </v-col>
     <v-col md="3" cols="12">
     <div class="display-1">{{ video.name }}</div>
-    <div class="green--text" v-if="isPlayed">Played</div>
-    <div v-else> <v-btn x-small>Mark As Played</v-btn> </div>
+    <div class="green--text" v-if="isPlayed"><font-awesome-icon icon="check" /> Played</div>
+    <div v-else> <v-btn x-small v-on:click="markPlayed">Mark As Played</v-btn> </div>
     <div v-html="video.description"></div>
     </v-col>
     </v-row>
@@ -29,7 +30,7 @@ export default {
   },
   mounted() {
       this.$store.dispatch("loadVideos");
-    },
+  },
   computed: {
     // ...mapState(['videos']),
     video() {
@@ -37,7 +38,7 @@ export default {
         (vid) => vid._id == this.$route.params._id
       ) || {};
     },
-    ...mapState(["playedVideos, videos"]),
+    ...mapState(["playedVideos", "videos"]),
     playerOptions() {
       return {
         language: "en",
@@ -53,9 +54,14 @@ export default {
       };
     },
     isPlayed() {
-      return false;
+      return this.playedVideos.includes(this.video._id);
     }
   },
+  methods: {
+    markPlayed() {
+      this.$store.dispatch("markPlayed", this.video._id);
+    }
+  }
 };
 </script>
 
