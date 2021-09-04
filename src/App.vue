@@ -10,11 +10,18 @@
       </div>
 
       <v-spacer></v-spacer>
-
-      <v-btn text>
-        <span class="mr-2">SignUp</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <div v-if="currentUser.name">
+        {{currentUser.name}}
+        <v-btn text @click="logoutUser">
+          <span class="mr-2">LogOut</span>
+          <v-icon>mdi-open-in-new</v-icon>
+        </v-btn>
+      </div>
+      
+      <div v-else>
+        <v-btn text :to="{ name:'user-login'}" class="mr-2"> Login </v-btn>
+        <v-btn text :to="{ name:'user-registeration'}" class="mr-2"> Registeration </v-btn>
+      </div>
     </v-app-bar>
 
     <v-main>
@@ -24,14 +31,21 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 
 export default {
   name: 'App',
   mounted() {
     this.$store.dispatch("loadVideos");
+    this.$store.dispatch("loadCurrentUser");
   },
-  data: () => ({
-    //
-  }),
+  computed: {
+    ...mapState(["currentUser"])
+  },
+  methods: {
+    logoutUser(){
+      this.$store.dispatch("logoutUser");
+    }
+  }
 };
 </script>

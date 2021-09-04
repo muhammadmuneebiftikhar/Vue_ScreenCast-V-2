@@ -5,6 +5,9 @@ import VideoWatch from "../views/VideoWatch.vue";
 import VideoCreate from "../views/VideoCreate.vue";
 import AdminVideoList from "../views/AdminVideoList.vue";
 import AdminVideoEdit from "../views/AdminVideoEdit.vue";
+import AdminUserList from "../views/AdminUserList.vue";
+import UserLogin from "../views/UserLogin.vue";
+import UserRegisteration from "../views/UserRegisteration.vue";
 
 Vue.use(VueRouter);
 
@@ -13,6 +16,21 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+  },
+  {
+    path: "/login",
+    name: "user-login",
+    component: UserLogin,
+  },
+  {
+    path: "/registeration",
+    name: "user-registeration",
+    component: UserRegisteration,
+  },
+  {
+    path: "/admin/users",
+    name: "admin-user-list",
+    component: AdminUserList,
   },
   {
     path: "/about",
