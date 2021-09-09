@@ -96,7 +96,6 @@ export default new Vuex.Store({
     async loginUser({commit}, loginInfo){
       try{
         let response = await api().post("/sessions", loginInfo);
-        debugger
         let user = response.data.user;
         commit("SET_CURRENT_USER", user);
         return user;
@@ -107,7 +106,6 @@ export default new Vuex.Store({
     async registerUser({commit}, registerationInfo){
       try{
         let response = await api().post("/users", registerationInfo);
-        debugger
         let user = response.data;
         commit("SET_CURRENT_USER", user);
         return user;

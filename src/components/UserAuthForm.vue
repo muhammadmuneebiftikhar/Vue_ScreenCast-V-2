@@ -11,6 +11,7 @@
                     counter=true
                     :rules="[required('Password'), minLength('Password', 8)]"
                     />
+        <v-text-field v-model="userInfo.admin" label="Admin" :rules="[required('Admin Check True or False')]" v-if="hasName"/>
         <v-btn @click="submitForm(userInfo)" >{{buttonText}}</v-btn>
     </v-form>
 </template>

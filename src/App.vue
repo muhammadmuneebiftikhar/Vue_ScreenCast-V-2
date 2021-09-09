@@ -6,7 +6,7 @@
     >
       <div class="d-flex align-center">
         <v-btn text to="/">Vue ScreenCast</v-btn>
-        <v-btn text to="/admin/videos">Admin</v-btn>
+        <v-btn text to="/admin/videos" v-if="currentUser.admin">Admin</v-btn>
       </div>
 
       <v-spacer></v-spacer>
