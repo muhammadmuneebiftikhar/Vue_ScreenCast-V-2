@@ -10,6 +10,7 @@ export default new Vuex.Store({
     playedVideos: [],
     users: [],
     currentUser: [],
+    snackbars: [],
   },
   mutations: {
     SET_VIDEOS(state, videos){
@@ -49,6 +50,9 @@ export default new Vuex.Store({
     SET_CURRENT_USER(state, user){
       state.currentUser = user;
       window.localStorage.currentUser = JSON.stringify(user);
+    },
+    SET_SNACKBAR(state, snackbar) {
+      state.snackbars = state.snackbars.concat(snackbar);
     }
   },
   actions: {
@@ -112,7 +116,12 @@ export default new Vuex.Store({
       } catch{
         return {error : "There is an error. Please try again."}
       }
-    }
+    },
+    setSnackbar({commit}, snackbar) {
+      snackbar.showing = true;
+      snackbar.color = snackbar.color || "success";
+      commit("SET_SNACKBAR" , snackbar);
+    },
   },
   modules: {},
 });

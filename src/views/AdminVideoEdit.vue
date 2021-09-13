@@ -21,6 +21,7 @@ export default {
     methods: {
         async saveVideo(){
             await this.$store.dispatch("editVideo", this.video);
+            this.$store.dispatch("setSnackbar", { text: "You have successfully Edited a video." });
             this.$router.push({name: "admin-video-list"});
         }
     }

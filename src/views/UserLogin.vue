@@ -16,9 +16,14 @@ export default {
         async loginUser(userInfo){
             let user = await this.$store.dispatch("loginUser", userInfo);
             if(user.error){
-                alert(user.error);
+                this.$store.dispatch("setSnackbar", {color: "error" , text: user.error });
             } else {
-                alert("Thank you for signing in " + user.name);
+                this.$store.dispatch("setSnackbar", { text: `Thank you for signing in ` +user.name });
+                if(user.admin) {
+                    this.$router.push('/admin/videos');
+                } else {
+                    this.$router.push('/');
+                }
             }
         }
     }

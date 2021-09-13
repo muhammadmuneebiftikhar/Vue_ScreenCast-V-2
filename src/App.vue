@@ -27,6 +27,22 @@
     <v-main>
       <router-view/>
     </v-main>
+
+    <v-snackbar
+        v-for="(snackbar, index) in snackbars.filter(s => s.showing)"
+        :key="snackbar.text + Math.random()"
+        v-model="snackbar.showing"
+        :timeout="snackbar.timeout"
+        :color="snackbar.color"
+        :style="`bottom: ${(index * 60) + 8}px`"
+    >
+                {{snackbar.text}}
+        
+        <v-btn text @click="snackbar.showing = false">
+            Close
+        </v-btn>
+    </v-snackbar>
+
   </v-app>
 </template>
 
@@ -40,11 +56,12 @@ export default {
     this.$store.dispatch("loadCurrentUser");
   },
   computed: {
-    ...mapState(["currentUser"])
+    ...mapState(["currentUser", "snackbars"])
   },
   methods: {
     logoutUser(){
       this.$store.dispatch("logoutUser");
+      this.$router.push("/login");
     }
   }
 };
