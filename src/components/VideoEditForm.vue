@@ -8,7 +8,7 @@
         <v-textarea v-model="video.description" 
                         label="Description" 
                         counter=true
-                        :rules="[required('Description'), minLength('Description', 20), maxLength('Name', 30)]"/>
+                        :rules="[required('Description'), minLength('Description', 20), maxLength('Description', 30)]"/>
         <v-text-field v-model="video.thumbnail" 
                         label="Thumbnail URL" 
                         :rules="[required('Thumbnail')]"/>

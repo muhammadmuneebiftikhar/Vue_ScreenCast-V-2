@@ -21,19 +21,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 export default {
   name: "home",
   computed: {
-      ...mapState([ 'videos' ,'playedVideos']),
+      ...mapState([ 'videos']),
+      ...mapGetters(["isPlayed"])
   },
   methods: {
-        isPlayed(videoId){
-          if(this.playedVideos.includes(videoId)){
-            return true;
-          }
-          return false;
-      },
   }
 };
 </script>

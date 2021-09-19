@@ -7,7 +7,6 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     videos: [],
-    playedVideos: [],
     users: [],
     currentUser: [],
     snackbars: [],
@@ -17,15 +16,14 @@ export default new Vuex.Store({
       state.videos = videos;
     },
     SET_PLAYED_VIDEOS(state, playedVideos){
-      state.playedVideos = playedVideos;
+      Vue.set(state.currentUser, 'playedVideos', playedVideos);
     },
     SET_USERS(state, users){
       state.users = users;
     },
     MARK_VIDEO_PLAYED(state, videoId){
-      let playedVideos = state.playedVideos.concat(videoId);
-      state.playedVideos = playedVideos;
-      window.localStorage.playedVideos = JSON.stringify(playedVideos);
+      let playedVideos = state.currentUser.playedVideos.concat(videoId);
+      state.currentUser.playedVideos = playedVideos;
     },
     ADD_VIDEO(state, video){
       let videos = state.videos.concat(video);
@@ -59,22 +57,31 @@ export default new Vuex.Store({
     async loadVideos({commit}){
       let result = await api().get("/videos")
       commit("SET_VIDEOS", result.data.videos);
-      let playedVideos = JSON.parse(window.localStorage.playedVideos);
-      commit("SET_PLAYED_VIDEOS", playedVideos);
+
     },
-    async loadCurrentUser({commit})
-    {
+    async loadCurrentUser({commit, dispatch}) {
       //GETTING CURRENT USER FROM LOCAL STORE
       let user = JSON.parse(window.localStorage.currentUser);
       commit("SET_CURRENT_USER", user);
+      dispatch("loadPlayedVideos", user._id);
+    },
+    async loadPlayedVideos({commit}) {
+      let user = JSON.parse(window.localStorage.currentUser);
+      let response = await api().get(`/users/${user._id}`);
+      user = response.data.attributes;
+      commit("SET_PLAYED_VIDEOS", user.played_video_ids);
     },
     async loadUsers({commit}){
       let result = await api().get("/users");
       let users = result.data.users;
       commit("SET_USERS", users.map( u => u.attributes));
     },
-    markPlayed({commit}, videoId){
-      commit("MARK_VIDEO_PLAYED", videoId);
+    markPlayed({commit, state}, videoId){
+      if(state.currentUser.name) {
+        commit("MARK_VIDEO_PLAYED", videoId);
+        let user = JSON.parse(window.localStorage.currentUser)
+        api().put(`/users/${user._id}`, { played_video_ids: videoId });
+      }
     },
     async createVideo({commit}, video){
       let response = await api().post("/videos", video);
@@ -97,21 +104,25 @@ export default new Vuex.Store({
     logoutUser({commit}){
       commit("LOGOUT_USER");
     },
-    async loginUser({commit}, loginInfo){
+    async loginUser({commit, dispatch}, loginInfo){
       try{
         let response = await api().post("/sessions", loginInfo);
         let user = response.data.user;
         commit("SET_CURRENT_USER", user);
+        dispatch("loadPlayedVideos", user._id);
         return user;
       } catch{
         return {error : "Email/Password combination was not correct. Please try again."}
       }
     },
-    async registerUser({commit}, registerationInfo){
+    async registerUser({commit , dispatch}, registerationInfo){
       try{
         let response = await api().post("/users", registerationInfo);
         let user = response.data;
+
         commit("SET_CURRENT_USER", user);
+        dispatch("loadPlayedVideos", user._id);
+
         return user;
       } catch{
         return {error : "There is an error. Please try again."}
@@ -124,4 +135,12 @@ export default new Vuex.Store({
     },
   },
   modules: {},
+  getters: {
+    playedVideos: state => {
+      return state.currentUser.playedVideos || [];
+    },
+    isPlayed: (state, getters) => videoId => {
+      return getters.playedVideos.includes(videoId)
+    }
+  }
 });
