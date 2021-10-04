@@ -22,12 +22,11 @@ const routes = [
     path: "/admin",
     name: "home",
     component: Admin,
-    beforeEnter(to, from, next){
+    beforeEnter(to, from, next) {
       let currentUser = JSON.parse(window.localStorage.currentUser);
-      if(currentUser && currentUser.admin){
+      if (currentUser && currentUser.admin) {
         next();
-      }
-      else{
+      } else {
         next("/");
       }
     },
@@ -36,24 +35,24 @@ const routes = [
         path: "videos",
         name: "admin-video-list",
         component: AdminVideoList,
-      },  
+      },
       {
         path: "users",
         name: "admin-user-list",
         component: AdminUserList,
-      },  
+      },
       {
         path: "videos/:_id/edit",
         name: "admin-video-edit",
         component: AdminVideoEdit,
         params: true,
-      }, 
+      },
       {
         path: "video/new",
         name: "admin-video-create",
-        component: AdminVideoCreate
+        component: AdminVideoCreate,
       },
-    ]
+    ],
   },
   {
     path: "/login",

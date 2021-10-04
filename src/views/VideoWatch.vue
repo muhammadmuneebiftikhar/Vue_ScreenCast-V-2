@@ -1,21 +1,25 @@
 <template>
   <v-container>
     <v-row>
-    <v-col cols="12" md="9">
+      <v-col cols="12" md="9">
         <video-player
           ref="videoPlayer"
           :options="playerOptions"
           @ended="markPlayed"
         ></video-player>
-    </v-col>
-    <v-col md="3" cols="12">
-    <div class="display-1">{{ video.name }}</div>
-    <div class="green--text" v-if="isPlayed(video._id)"><font-awesome-icon icon="check" /> Played</div>
-    <div v-else> 
-      <v-btn x-small v-on:click="markPlayed" v-if="currentUser.name">Mark As Played</v-btn> 
-    </div>
-    <div v-html="video.description"></div>
-    </v-col>
+      </v-col>
+      <v-col md="3" cols="12">
+        <div class="display-1">{{ video.name }}</div>
+        <div class="green--text" v-if="isPlayed(video._id)">
+          <font-awesome-icon icon="check" /> Played
+        </div>
+        <div v-else>
+          <v-btn x-small v-on:click="markPlayed" v-if="currentUser.name"
+            >Mark As Played</v-btn
+          >
+        </div>
+        <div v-html="video.description"></div>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -24,23 +28,25 @@
 import "video.js/dist/video-js.css";
 
 import { videoPlayer } from "vue-video-player";
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState } from "vuex";
 
 export default {
   components: {
     videoPlayer,
   },
   mounted() {
-      this.$store.dispatch("loadVideos");
+    this.$store.dispatch("loadVideos");
   },
   computed: {
     video() {
-      return this.$store.state.videos.find(
-        (vid) => vid._id == this.$route.params._id
-      ) || {};
+      return (
+        this.$store.state.videos.find(
+          (vid) => vid._id == this.$route.params._id
+        ) || {}
+      );
     },
     ...mapGetters(["isPlayed"]),
-    ...mapState(['videos', 'currentUser']),
+    ...mapState(["videos", "currentUser"]),
     playerOptions() {
       return {
         language: "en",
@@ -59,11 +65,9 @@ export default {
   methods: {
     markPlayed() {
       this.$store.dispatch("markPlayed", this.video._id);
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

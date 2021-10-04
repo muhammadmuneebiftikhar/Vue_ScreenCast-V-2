@@ -1,8 +1,8 @@
 <template>
   <v-container>
-      <div v-for="user in users" :key="user._id">
-          {{user.name}} <v-btn x-small @click="loginUser(user)">Login</v-btn>
-      </div>
+    <div v-for="user in users" :key="user._id">
+      {{ user.name }} <v-btn x-small @click="loginUser(user)">Login</v-btn>
+    </div>
   </v-container>
 </template>
 
@@ -10,20 +10,18 @@
 import { mapState } from "vuex";
 
 export default {
-    computed: {
-        ...mapState(["users"])
+  computed: {
+    ...mapState(["users"]),
+  },
+  mounted() {
+    this.$store.dispatch("loadUsers");
+  },
+  methods: {
+    loginUser(user) {
+      this.$store.dispatch("loginUser", user);
     },
-    mounted() {
-        this.$store.dispatch("loadUsers")
-    },
-    methods: {
-        loginUser(user){
-            this.$store.dispatch("loginUser", user);
-        }
-    }
-}
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

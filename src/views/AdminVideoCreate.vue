@@ -1,17 +1,21 @@
 <template>
   <v-container>
-      <h1>Video Create Page</h1>
-      <v-row>
-        <v-col md="3" cols="12">
-          <VideoEditForm :video="video" :saveVideo="createVideo" buttonText="Create Video"/>
-        </v-col>  
-        <v-col md="9" cols="12">
-          <v-card max-width="335px" hover >
-              <v-img :src="video.thumbnail" />
-              <v-card-title> {{ video._id }}  {{ video.name }}</v-card-title>
-          </v-card>
-        </v-col>
-      </v-row>  
+    <h1>Video Create Page</h1>
+    <v-row>
+      <v-col md="3" cols="12">
+        <VideoEditForm
+          :video="video"
+          :saveVideo="createVideo"
+          buttonText="Create Video"
+        />
+      </v-col>
+      <v-col md="9" cols="12">
+        <v-card max-width="335px" hover>
+          <v-img :src="video.thumbnail" />
+          <v-card-title> {{ video._id }} {{ video.name }}</v-card-title>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -23,19 +27,20 @@ export default {
     VideoEditForm,
   },
   data() {
-        return {
-           video: {},
-        } 
+    return {
+      video: {},
+    };
+  },
+  methods: {
+    async createVideo() {
+      let video = await this.$store.dispatch("createVideo", this.video);
+      this.$store.dispatch("setSnackbar", {
+        text: `You have successfully created a new video ${video.name}.`,
+      });
+      this.$router.push({ name: "video-watch", params: { _id: video._id } });
     },
-    methods: {
-      async createVideo(){
-        let video = await this.$store.dispatch("createVideo", this.video);
-        this.$store.dispatch("setSnackbar", { text: `You have successfully created a new video ${video.name}.`});
-        this.$router.push({ name: "video-watch", params: {_id : video._id }});
-      }
-    }
-}
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
